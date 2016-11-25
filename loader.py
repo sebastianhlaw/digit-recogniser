@@ -1,10 +1,10 @@
 # Author:   Sebastian Law
 # Date:     07-Jul-2016
-# Revised:  08-Jul-2016
+# Revised:  25-Nov-2016
 
-# TODO: convert classification to one-hot encoding
+# TODO: convert classification to one-hot encoding (?) See sklearn.preprocessing.LabelBinarizer
 
-from sklearn import datasets
+from sklearn import datasets, preprocessing
 import os
 from sys import platform
 import pandas as pd
@@ -22,29 +22,41 @@ def data_path():
         return
 
 
-def load_sklearn():
+def load_sklearn(scaled=True):
     """Loads sklearn toy dataset."""
     digits = datasets.load_digits()
     n = len(digits.images)
-    data = digits.images.reshape((n, -1)).astype(int)
+    if scaled:
+        scaler = preprocessing.MinMaxScaler()
+        data = scaler.fit_transform(digits.images.reshape((n, -1)).astype(float))
+    else:
+        data = digits.images.reshape((n, -1)).astype(int)
     labels = digits.target.astype(int)
     print(n)
     return data, labels
 
 
-def load_kaggle_public():
+def load_kaggle_public(scaled=True):
     """Loads kaggle training data from file."""
     df = pd.read_csv(os.path.join(data_path(), 'train.csv'), header=0)
     labels = df.ix[:, 0].as_matrix().astype(int)
-    data = df.ix[:, 1:].as_matrix().astype(int)
+    if scaled:
+        scaler = preprocessing.MinMaxScaler()
+        data = scaler.fit_transform(df.ix[:, 1:].as_matrix().astype(float))
+    else:
+        data = df.ix[:, 1:].as_matrix().astype(int)
     print(len(data))
     return data, labels
 
 
-def load_kaggle_private():
+def load_kaggle_private(scaled=True):
     """Loads kaggle test data from file."""
     df = pd.read_csv(os.path.join(data_path(), 'test.csv'), header=0)
-    data = df.as_matrix().astype(int)
+    if scaled:
+        scaler = preprocessing.MinMaxScaler()
+        data = scaler.fit_transform(data = df.as_matrix().astype(float))
+    else:
+        data = df.as_matrix().astype(int)
     print(len(data))
     return data
 
