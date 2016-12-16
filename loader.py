@@ -28,7 +28,7 @@ def load_sklearn(scaled=True):
     n = len(digits.images)
     if scaled:
         scaler = preprocessing.MinMaxScaler()
-        data = scaler.fit_transform(digits.images.reshape((n, -1)).astype(float))
+        data = scaler.fit_transform(X=digits.images.reshape((n, -1)).astype(float))
     else:
         data = digits.images.reshape((n, -1)).astype(int)
     labels = digits.target.astype(int)
@@ -42,7 +42,7 @@ def load_kaggle_public(scaled=True):
     labels = df.ix[:, 0].as_matrix().astype(int)
     if scaled:
         scaler = preprocessing.MinMaxScaler()
-        data = scaler.fit_transform(df.ix[:, 1:].as_matrix().astype(float))
+        data = scaler.fit_transform(X=df.ix[:, 1:].as_matrix().astype(float))
     else:
         data = df.ix[:, 1:].as_matrix().astype(int)
     print(len(data))
@@ -54,7 +54,7 @@ def load_kaggle_private(scaled=True):
     df = pd.read_csv(os.path.join(data_path(), 'test.csv'), header=0)
     if scaled:
         scaler = preprocessing.MinMaxScaler()
-        data = scaler.fit_transform(data = df.as_matrix().astype(float))
+        data = scaler.fit_transform(X=df.as_matrix().astype(float))
     else:
         data = df.as_matrix().astype(int)
     print(len(data))

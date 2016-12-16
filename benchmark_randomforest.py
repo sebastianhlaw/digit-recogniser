@@ -1,8 +1,8 @@
 # Author:   Sebastian Law
-# Date:     22-Nov-2016
+# Date:     16-Nov-2016
 # Revised:  16-Dec-2016
 
-from sklearn import svm, model_selection
+from sklearn import ensemble, model_selection
 from sklearn.decomposition import PCA
 
 import loader
@@ -31,12 +31,12 @@ XX_test = pca.transform(X_test)
 
 # run the classifier
 print("Running classifier...")
-classifier = svm.SVC().fit(XX_train, y_train)
+classifier = ensemble.RandomForestClassifier(n_estimators=1000).fit(XX_train, y_train)
 score = classifier.score(XX_train, y_train)
 print("Training score:", score)
 score = classifier.score(XX_validate, y_validate)
 print("Validation score:", score)
 y_predict = classifier.predict(XX_test)
-results.dump(y_predict, "benchmark_svm")
+results.dump(y_predict, "benchmark_randomforest")
 
 print("Finished.")
